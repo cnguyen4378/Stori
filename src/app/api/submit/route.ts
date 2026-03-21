@@ -1,10 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import { processStory } from "@/lib/process";
+import { randomUUID } from "crypto";
+import fs from "fs";
+import path from "path";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const content = body.content?.trim();
+    const contentType = request.headers.get("content-type") || "";
+    let content: string;
+    let mediaUrl: string | null = null;
+
+    if (contentType.includes("multipart/form-data")) {
+      const formData = await request.formData();
+      content = (formData.get("content") as string)?.trim() || "";
+      const file = formData.get("file") as File | null;
+
+      if (file && file.size > 0) {
+        const ext = path.extname(file.name) || ".bin";
+        const filename = `${randomUUID()}${ext}`;
+        const uploadsDir = path.join(process.cwd(), "public", "uploads");
+        if (!fs.existsSync(uploadsDir))
+          fs.mkdirSync(uploadsDir, { recursive: true });
+
+        const buffer = Buffer.from(await file.arrayBuffer());
+        fs.writeFileSync(path.join(uploadsDir, filename), buffer);
+        mediaUrl = `/uploads/${filename}`;
+      }
+    } else {
+      const body = await request.json();
+      content = body.content?.trim() || "";
+    }
 
     if (!content) {
       return NextResponse.json(
@@ -13,7 +38,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const story = await processStory(content);
+    const story = await processStory(content, mediaUrl);
 
     return NextResponse.json({
       success: true,
