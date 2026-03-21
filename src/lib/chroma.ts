@@ -108,10 +108,16 @@ export async function storeEmbedding(
   }
 }
 
+export interface SearchResult {
+  id: string;
+  score: number;
+  tags: string;
+}
+
 export async function semanticSearch(
   query: string,
-  topK = 5
-): Promise<{ id: string; score: number }[]> {
+  topK = 10
+): Promise<SearchResult[]> {
   const queryEmbedding = await generateEmbedding(query);
   const col = await getCollection();
 
@@ -119,18 +125,28 @@ export async function semanticSearch(
     const results = await col.query({
       queryEmbeddings: [queryEmbedding],
       nResults: topK,
+      include: ["distances", "metadatas"],
     });
     const ids = results.ids[0] || [];
     const distances = results.distances?.[0] || [];
-    return ids.map((id, i) => ({
-      id: id as string,
-      score: 1 - (distances[i] ?? 0),
-    }));
+    const metadatas = results.metadatas?.[0] || [];
+    return ids.map((id, i) => {
+      const d = distances[i] ?? 2;
+      return {
+        id: id as string,
+        score: Math.max(0, 1 - d / 2),
+        tags: (metadatas[i] as Record<string, string>)?.tags || "[]",
+      };
+    });
   }
 
   load();
   return vectors
-    .map((v) => ({ id: v.id, score: cosine(queryEmbedding, v.embedding) }))
+    .map((v) => ({
+      id: v.id,
+      score: cosine(queryEmbedding, v.embedding),
+      tags: v.metadata.tags,
+    }))
     .sort((a, b) => b.score - a.score)
     .slice(0, topK);
 }
