@@ -13,8 +13,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { summary, tags } = await generateSummaryAndTags(content);
-    return NextResponse.json({ summary, tags });
+    const { title, summary, tags } = await generateSummaryAndTags(content);
+    return NextResponse.json({ title, summary, tags });
   } catch (error) {
     console.error("Preview error:", error);
     return NextResponse.json(

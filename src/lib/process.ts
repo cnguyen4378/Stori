@@ -14,8 +14,8 @@ export async function processStory(
   mediaUrl?: string | null
 ): Promise<Story> {
   const id = uuidv4();
-  const { summary, tags } = await generateSummaryAndTags(text);
-  const story = insertStory({ id, content: text, summary, tags, mediaUrl });
+  const { title, summary, tags } = await generateSummaryAndTags(text);
+  const story = insertStory({ id, title, content: text, summary, tags, mediaUrl });
 
   // Store embedding for semantic search (non-blocking, won't crash on failure)
   storeEmbedding(id, text, summary, JSON.stringify(tags)).catch((err) =>

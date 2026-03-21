@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
 
     const formatted = stories.map((s) => ({
       id: s.id,
+      title: s.title,
       content: s.content,
       summary: s.summary,
       tags: JSON.parse(s.tags),
@@ -35,6 +36,7 @@ export async function GET(request: NextRequest) {
     const stories = searchStoriesByKeyword(query);
     const formatted = stories.map((s) => ({
       id: s.id,
+      title: s.title,
       content: s.content,
       summary: s.summary,
       tags: JSON.parse(s.tags),

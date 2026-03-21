@@ -3,6 +3,7 @@ import path from "path";
 
 export interface Story {
   id: string;
+  title: string;
   content: string;
   summary: string;
   tags: string; // JSON array stored as string
@@ -21,6 +22,7 @@ function getDb(): Database.Database {
   db.exec(`
     CREATE TABLE IF NOT EXISTS stories (
       id TEXT PRIMARY KEY,
+      title TEXT NOT NULL DEFAULT 'Untitled Story',
       content TEXT NOT NULL,
       summary TEXT NOT NULL DEFAULT '',
       tags TEXT NOT NULL DEFAULT '[]',
@@ -29,11 +31,12 @@ function getDb(): Database.Database {
     )
   `);
 
-  // Add media_url column to existing databases that don't have it yet
-  try {
-    db.exec(`ALTER TABLE stories ADD COLUMN media_url TEXT`);
-  } catch {
-    // Column already exists
+  // Add columns to existing databases that don't have them yet
+  for (const col of [
+    "ALTER TABLE stories ADD COLUMN media_url TEXT",
+    "ALTER TABLE stories ADD COLUMN title TEXT NOT NULL DEFAULT 'Untitled Story'",
+  ]) {
+    try { db.exec(col); } catch { /* already exists */ }
   }
 
   return db;
@@ -41,6 +44,7 @@ function getDb(): Database.Database {
 
 export function insertStory(story: {
   id: string;
+  title: string;
   content: string;
   summary: string;
   tags: string[];
@@ -50,10 +54,17 @@ export function insertStory(story: {
   const tagsJson = JSON.stringify(story.tags);
 
   d.prepare(
-    "INSERT INTO stories (id, content, summary, tags, media_url) VALUES (?, ?, ?, ?, ?)"
-  ).run(story.id, story.content, story.summary, tagsJson, story.mediaUrl || null);
+    "INSERT INTO stories (id, title, content, summary, tags, media_url) VALUES (?, ?, ?, ?, ?, ?)"
+  ).run(story.id, story.title, story.content, story.summary, tagsJson, story.mediaUrl || null);
 
   return d.prepare("SELECT * FROM stories WHERE id = ?").get(story.id) as Story;
+}
+
+export function getStoryById(id: string): Story | undefined {
+  const d = getDb();
+  return d.prepare("SELECT * FROM stories WHERE id = ?").get(id) as
+    | Story
+    | undefined;
 }
 
 export function getAllStories(): Story[] {
@@ -77,7 +88,7 @@ export function searchStoriesByKeyword(query: string): Story[] {
   const pattern = `%${query}%`;
   return d
     .prepare(
-      "SELECT * FROM stories WHERE content LIKE ? OR summary LIKE ? OR tags LIKE ? ORDER BY created_at DESC LIMIT 10"
+      "SELECT * FROM stories WHERE title LIKE ? OR content LIKE ? OR summary LIKE ? OR tags LIKE ? ORDER BY created_at DESC LIMIT 10"
     )
-    .all(pattern, pattern, pattern) as Story[];
+    .all(pattern, pattern, pattern, pattern) as Story[];
 }

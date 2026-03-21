@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 interface AiResult {
+  title: string;
   summary: string;
   tags: string[];
 }
@@ -19,8 +20,9 @@ export async function generateSummaryAndTags(content: string): Promise<AiResult>
     const prompt = `You are processing a story from a first-generation college graduate.
 
 Given the following story text, return:
-1. A concise summary (2–3 sentences max)
-2. 3–6 relevant lowercase tags as a JSON array
+1. A short, engaging title (5–10 words, like a blog post headline)
+2. A concise summary (2–3 sentences max)
+3. 3–6 relevant lowercase tags as a JSON array
 
 Story:
 """
@@ -28,7 +30,7 @@ ${content}
 """
 
 Respond ONLY with valid JSON in this exact format, nothing else:
-{"summary": "...", "tags": ["tag1", "tag2", "tag3"]}`;
+{"title": "...", "summary": "...", "tags": ["tag1", "tag2", "tag3"]}`;
 
     const result = await model.generateContent(prompt);
     const text = result.response.text().trim();
@@ -41,6 +43,7 @@ Respond ONLY with valid JSON in this exact format, nothing else:
 
     const parsed = JSON.parse(jsonMatch[0]);
     return {
+      title: parsed.title || fallbackTitle(content),
       summary: parsed.summary || fallbackSummary(content),
       tags: Array.isArray(parsed.tags) ? parsed.tags : ["general"],
     };
@@ -51,7 +54,13 @@ Respond ONLY with valid JSON in this exact format, nothing else:
 }
 
 function fallback(content: string): AiResult {
-  return { summary: fallbackSummary(content), tags: ["general"] };
+  return { title: fallbackTitle(content), summary: fallbackSummary(content), tags: ["general"] };
+}
+
+function fallbackTitle(content: string): string {
+  const first = content.split(/[.!?\n]+/)[0]?.trim() || "";
+  if (first.length <= 60) return first || "Untitled Story";
+  return first.slice(0, 57) + "...";
 }
 
 function fallbackSummary(content: string): string {
