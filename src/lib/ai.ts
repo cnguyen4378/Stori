@@ -14,7 +14,7 @@ export async function generateSummaryAndTags(content: string): Promise<AiResult>
 
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     const prompt = `You are processing a story from a first-generation college graduate.
 
