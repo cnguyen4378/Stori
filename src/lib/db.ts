@@ -6,6 +6,7 @@ export interface Story {
   content: string;
   summary: string;
   tags: string; // JSON array stored as string
+  media_url: string | null;
   created_at: string;
 }
 
@@ -23,9 +24,17 @@ function getDb(): Database.Database {
       content TEXT NOT NULL,
       summary TEXT NOT NULL DEFAULT '',
       tags TEXT NOT NULL DEFAULT '[]',
+      media_url TEXT,
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
     )
   `);
+
+  // Add media_url column to existing databases that don't have it yet
+  try {
+    db.exec(`ALTER TABLE stories ADD COLUMN media_url TEXT`);
+  } catch {
+    // Column already exists
+  }
 
   return db;
 }
@@ -35,13 +44,14 @@ export function insertStory(story: {
   content: string;
   summary: string;
   tags: string[];
+  mediaUrl?: string | null;
 }): Story {
   const d = getDb();
   const tagsJson = JSON.stringify(story.tags);
 
   d.prepare(
-    "INSERT INTO stories (id, content, summary, tags) VALUES (?, ?, ?, ?)"
-  ).run(story.id, story.content, story.summary, tagsJson);
+    "INSERT INTO stories (id, content, summary, tags, media_url) VALUES (?, ?, ?, ?, ?)"
+  ).run(story.id, story.content, story.summary, tagsJson, story.mediaUrl || null);
 
   return d.prepare("SELECT * FROM stories WHERE id = ?").get(story.id) as Story;
 }
@@ -51,4 +61,23 @@ export function getAllStories(): Story[] {
   return d
     .prepare("SELECT * FROM stories ORDER BY created_at DESC LIMIT 50")
     .all() as Story[];
+}
+
+export function getStoriesByIds(ids: string[]): Story[] {
+  if (ids.length === 0) return [];
+  const d = getDb();
+  const placeholders = ids.map(() => "?").join(",");
+  return d
+    .prepare(`SELECT * FROM stories WHERE id IN (${placeholders})`)
+    .all(...ids) as Story[];
+}
+
+export function searchStoriesByKeyword(query: string): Story[] {
+  const d = getDb();
+  const pattern = `%${query}%`;
+  return d
+    .prepare(
+      "SELECT * FROM stories WHERE content LIKE ? OR summary LIKE ? OR tags LIKE ? ORDER BY created_at DESC LIMIT 10"
+    )
+    .all(pattern, pattern, pattern) as Story[];
 }

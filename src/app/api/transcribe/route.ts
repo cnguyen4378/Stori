@@ -17,6 +17,7 @@ const ALLOWED_TYPES = [
   "video/mp4",
   "video/webm",
   "video/mpeg",
+  "video/quicktime",
 ];
 
 export async function POST(request: NextRequest) {
