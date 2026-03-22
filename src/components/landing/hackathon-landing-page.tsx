@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getAllStories } from "@/lib/db";
 
 const topics = [
   "finances",
@@ -12,29 +13,6 @@ const topics = [
   "graduation regrets",
 ];
 
-const featuredStories = [
-  {
-    title: "I thought everyone else understood financial aid except me",
-    excerpt:
-      "The hardest part was not the paperwork. It was feeling like I was the only person guessing. I wish I had known that asking basic questions early would have saved me so much stress.",
-    type: "Written story",
-    tag: "finances",
-  },
-  {
-    title: "My first internship taught me that confidence can sound quiet",
-    excerpt:
-      "I kept waiting to feel ready before speaking up. What helped was realizing that thoughtful questions were part of showing up well, not proof that I did not belong there.",
-    type: "Audio story",
-    tag: "internships",
-  },
-  {
-    title: "Homesickness hit me long after freshman year",
-    excerpt:
-      "I expected to feel better with time, so I didn't know what to call it when the loneliness came back later. Hearing someone else describe that experience would have changed everything.",
-    type: "Written story",
-    tag: "homesickness",
-  },
-];
 
 const valueCards = [
   {
@@ -127,6 +105,82 @@ function SectionHeading({
         </p>
       ) : null}
     </div>
+  );
+}
+
+function FeaturedStoriesSection() {
+  const stories = getAllStories().slice(0, 3);
+
+  if (stories.length === 0) {
+    return (
+      <section id="stories" className="border-y border-[#e5d6c5] bg-[#fbf6f0]">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+          <SectionHeading
+            eyebrow="Stories"
+            title="Be the first to share your story."
+            description="No stories have been shared yet. Your experience could help someone feel less alone."
+          />
+          <div className="mt-8">
+            <Link
+              href="/upload"
+              className="inline-flex items-center justify-center rounded-full bg-[#42583b] px-7 py-3.5 text-base font-semibold text-[#f8f2e8] shadow-[0_14px_30px_rgba(66,88,59,0.2)] transition duration-200 hover:-translate-y-0.5 hover:bg-[#364a30]"
+            >
+              Share Your Story
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section id="stories" className="border-y border-[#e5d6c5] bg-[#fbf6f0]">
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+        <SectionHeading
+          eyebrow="Real stories"
+          title="Voices from students who have been where you are."
+        />
+        <div className="mt-8 grid gap-5 lg:grid-cols-3">
+          {stories.map((story) => {
+            const tags: string[] = (() => {
+              try { return JSON.parse(story.tags); } catch { return []; }
+            })();
+            const videoExts = [".mp4", ".webm", ".mov", ".mpeg"];
+            const mediaType = story.media_url
+              ? videoExts.some((ext) => story.media_url!.toLowerCase().endsWith(ext))
+                ? "Video story"
+                : "Audio story"
+              : "Written story";
+            const summaryPreview = story.summary?.length > 180
+              ? story.summary.slice(0, 180) + "..."
+              : story.summary;
+
+            return (
+              <Link
+                key={story.id}
+                href={`/story/${story.id}`}
+                className="block rounded-[1.75rem] border border-[#e2d3c3] bg-white p-6 shadow-[0_16px_34px_rgba(87,62,41,0.08)] transition duration-200 hover:-translate-y-1"
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <span className="rounded-full bg-[#e8f0e4] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#42583b]">
+                    {mediaType}
+                  </span>
+                  {tags[0] && (
+                    <span className="text-sm text-[#7a6554]">{tags[0]}</span>
+                  )}
+                </div>
+                <h3 className="mt-5 text-2xl font-semibold leading-tight text-[#37281e]">
+                  {story.title || "Untitled Story"}
+                </h3>
+                <p className="mt-4 text-sm leading-7 text-[#695647]">
+                  {summaryPreview || "No summary available."}
+                </p>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -235,34 +289,7 @@ export default function HackathonLandingPage() {
         </div>
       </section>
 
-      <section id="stories" className="border-y border-[#e5d6c5] bg-[#fbf6f0]">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-          <SectionHeading
-            eyebrow="Featured stories"
-            title="A preview of the voices students could come here to learn from."
-            description="These examples are placeholders, but they are written to feel personal, practical, and emotionally grounded instead of polished for marketing."
-          />
-          <div className="mt-8 grid gap-5 lg:grid-cols-3">
-            {featuredStories.map((story) => (
-              <article
-                key={story.title}
-                className="rounded-[1.75rem] border border-[#e2d3c3] bg-white p-6 shadow-[0_16px_34px_rgba(87,62,41,0.08)] transition duration-200 hover:-translate-y-1"
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <span className="rounded-full bg-[#e8f0e4] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#42583b]">
-                    {story.type}
-                  </span>
-                  <span className="text-sm text-[#7a6554]">{story.tag}</span>
-                </div>
-                <h3 className="mt-5 text-2xl font-semibold leading-tight text-[#37281e]">
-                  {story.title}
-                </h3>
-                <p className="mt-4 text-sm leading-7 text-[#695647]">{story.excerpt}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <FeaturedStoriesSection />
 
       <section id="how" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
         <SectionHeading

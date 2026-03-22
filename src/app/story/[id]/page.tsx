@@ -33,14 +33,15 @@ export default async function StoryPage({
           <MediaPlayer url={story.media_url} />
         </div>
 
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#5f6f56] mb-2">
+        <details className="group">
+          <summary className="text-sm font-semibold uppercase tracking-[0.22em] text-[#5f6f56] cursor-pointer select-none list-none flex items-center gap-2">
             Summary
-          </p>
-          <p className="text-base text-[#6b5748] leading-7">
+            <span className="text-xs transition-transform duration-200 group-open:rotate-90">&#9654;</span>
+          </summary>
+          <p className="text-base text-[#6b5748] leading-7 mt-3">
             {story.summary}
           </p>
-        </div>
+        </details>
 
         {tags.length > 0 && (
           <div className="flex flex-wrap gap-2">

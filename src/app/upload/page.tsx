@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import Link from "next/link";
 
 interface SavedStory {
@@ -17,6 +17,11 @@ export default function UploadPage() {
   const [saving, setSaving] = useState(false);
   const [savedStory, setSavedStory] = useState<SavedStory | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const filePreviewUrl = useMemo(
+    () => (file ? URL.createObjectURL(file) : null),
+    [file]
+  );
 
   const [previewing, setPreviewing] = useState(false);
   const [preview, setPreview] = useState<{
@@ -160,6 +165,28 @@ export default function UploadPage() {
               />
             </div>
 
+            {file && filePreviewUrl && (
+              <div className="rounded-[1rem] overflow-hidden">
+                {file.type.startsWith("video/") ? (
+                  <video
+                    controls
+                    preload="metadata"
+                    className="w-full rounded-[1rem]"
+                    src={filePreviewUrl}
+                  />
+                ) : (
+                  <div className="bg-[#efe3d4] rounded-[1rem] p-4">
+                    <audio
+                      controls
+                      preload="metadata"
+                      className="w-full"
+                      src={filePreviewUrl}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
             <button
               type="submit"
               disabled={!file || loading}
@@ -205,21 +232,17 @@ export default function UploadPage() {
 
               {preview && (
                 <div className="p-6 bg-[#fbf6f0] border border-[#e5d6c5] rounded-[1.5rem] space-y-4">
-                  <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#5f6f56] mb-1">
-                      Title
-                    </p>
-                    <p className="text-lg font-semibold text-[#3f2f22]">{preview.title}</p>
-                  </div>
+                  <p className="text-lg font-semibold text-[#3f2f22]">{preview.title}</p>
 
-                  <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#5f6f56] mb-1">
+                  <details className="group" open>
+                    <summary className="text-sm font-semibold uppercase tracking-[0.22em] text-[#5f6f56] cursor-pointer select-none list-none flex items-center gap-2">
                       Summary
-                    </p>
-                    <p className="text-sm text-[#6b5748] leading-7">
+                      <span className="text-xs transition-transform duration-200 group-open:rotate-90">&#9654;</span>
+                    </summary>
+                    <p className="text-sm text-[#6b5748] leading-7 mt-2">
                       {preview.summary}
                     </p>
-                  </div>
+                  </details>
 
                   <div>
                     <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#5f6f56] mb-2">
@@ -263,21 +286,17 @@ export default function UploadPage() {
                 Your story has been saved
               </p>
 
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#5f6f56] mb-1">
-                  Title
-                </p>
-                <p className="font-semibold text-[#3f2f22]">{savedStory.title}</p>
-              </div>
+              <p className="font-semibold text-[#3f2f22]">{savedStory.title}</p>
 
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#5f6f56] mb-1">
+              <details className="group" open>
+                <summary className="text-sm font-semibold uppercase tracking-[0.22em] text-[#5f6f56] cursor-pointer select-none list-none flex items-center gap-2">
                   Summary
-                </p>
-                <p className="text-sm text-[#6b5748] leading-7">
+                  <span className="text-xs transition-transform duration-200 group-open:rotate-90">&#9654;</span>
+                </summary>
+                <p className="text-sm text-[#6b5748] leading-7 mt-2">
                   {savedStory.summary}
                 </p>
-              </div>
+              </details>
 
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#5f6f56] mb-2">
