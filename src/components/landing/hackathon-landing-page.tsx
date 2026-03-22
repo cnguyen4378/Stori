@@ -1,69 +1,6 @@
 import Link from "next/link";
 import { getAllStories } from "@/lib/db";
 
-const topics = [
-  "finances",
-  "imposter syndrome",
-  "internships",
-  "family pressure",
-  "homesickness",
-  "career advice",
-  "transferring schools",
-  "making friends",
-  "graduation regrets",
-];
-
-
-const valueCards = [
-  {
-    title: "Real perspective",
-    body: "Stori centers lived experience from first-gen graduates, not generic advice copied from a hundred other places.",
-  },
-  {
-    title: "Easy to explore",
-    body: "Students can quickly browse stories, themes, and practical lessons without getting lost in clutter or long explanations.",
-  },
-  {
-    title: "Built for honesty",
-    body: "The product makes room for mistakes, uncertainty, and the quiet wins that often matter most in a first-gen journey.",
-  },
-];
-
-const findCards = [
-  {
-    title: "Written and audio stories",
-    body: "Short, relatable stories shared in the format that feels most natural, whether that is writing or speaking out loud.",
-  },
-  {
-    title: "Clear topics and tags",
-    body: "Advice categories like finances, family pressure, and internships help students find what feels relevant right away.",
-  },
-  {
-    title: "Practical and emotional guidance",
-    body: "Students get both honest feelings and useful takeaways, which is often what generic college advice leaves out.",
-  },
-];
-
-const steps = [
-  {
-    title: "Explore real stories",
-    body: "Start with first-gen experiences that feel grounded, specific, and easy to scan.",
-  },
-  {
-    title: "Learn from lived experience",
-    body: "See what people wish they had known earlier about school, work, belonging, and growing up fast.",
-  },
-  {
-    title: "Share your own journey",
-    body: "Add your story so someone else has a clearer path than you did.",
-  },
-];
-
-const impactPoints = [
-  "Belonging grows when students can recognize themselves in someone else's story.",
-  "Confidence grows when advice feels specific, honest, and emotionally true.",
-  "Mentorship becomes more accessible when guidance is archived instead of hidden in one-off conversations.",
-];
 
 function SectionHeading({
   eyebrow,
@@ -224,117 +161,7 @@ export default function HackathonLandingPage() {
         </div>
       </section>
 
-      <section id="why" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="Why Stori"
-          title="First-gen students deserve advice that sounds like it came from someone who actually understands."
-          description="There are plenty of general resources online, but far fewer places where students can hear honest, relatable stories from people who have lived through similar pressure, uncertainty, and decisions. Stori fills that gap with guidance rooted in real experience."
-        />
-        <div className="mt-8 grid gap-5 md:grid-cols-3">
-          {valueCards.map((card) => (
-            <article
-              key={card.title}
-              className="rounded-[1.5rem] border border-[#e5d6c5] bg-[#fffaf4] p-6 shadow-[0_12px_28px_rgba(87,62,41,0.08)]"
-            >
-              <h3 className="text-xl font-semibold text-[#3a2b1f]">{card.title}</h3>
-              <p className="mt-3 text-sm leading-7 text-[#695647]">{card.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="find" className="border-y border-[#e5d6c5] bg-[#fbf6f0]">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-          <SectionHeading
-            eyebrow="What you'll find"
-            title="A cleaner path into stories, advice, and the moments people wish were easier to talk about."
-            description="The full product includes submission, storage, search, summaries, transcription, and vector-based discovery. This landing page simply frames that experience clearly and keeps the value easy to scan."
-          />
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
-            {findCards.map((card) => (
-              <article
-                key={card.title}
-                className="rounded-[1.5rem] border border-[#e3d3c1] bg-white p-6 shadow-[0_12px_28px_rgba(87,62,41,0.06)]"
-              >
-                <h3 className="text-xl font-semibold text-[#3a2b1f]">{card.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-[#695647]">{card.body}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="topics" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="Topics preview"
-          title="The kinds of stories students can scan at a glance."
-          description="From practical challenges to emotional ones, the archive helps students quickly recognize the themes that match what they are going through."
-        />
-        <div className="mt-8 flex flex-wrap gap-3">
-          {topics.map((topic, index) => (
-            <span
-              key={topic}
-              className={[
-                "rounded-full px-4 py-2 text-sm font-medium shadow-[0_8px_16px_rgba(87,62,41,0.06)]",
-                index % 3 === 0
-                  ? "bg-[#42583b] text-[#f8f2e8]"
-                  : index % 3 === 1
-                    ? "bg-[#f0dfcf] text-[#5b4638]"
-                    : "bg-[#f7f0e7] text-[#705c4c] border border-[#e0cfbc]",
-              ].join(" ")}
-            >
-              {topic}
-            </span>
-          ))}
-        </div>
-      </section>
-
       <FeaturedStoriesSection />
-
-      <section id="how" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="How it works"
-          title="A simple flow students can understand right away."
-          description="The page is intentionally straightforward so the two primary next steps never get buried."
-        />
-        <div className="mt-8 grid gap-5 md:grid-cols-3">
-          {steps.map((step, index) => (
-            <article
-              key={step.title}
-              className="rounded-[1.5rem] border border-[#e5d6c5] bg-[#fffaf4] p-6 shadow-[0_12px_28px_rgba(87,62,41,0.06)]"
-            >
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#5f6f56]">
-                Step {index + 1}
-              </p>
-              <h3 className="mt-4 text-2xl font-semibold text-[#392a1f]">{step.title}</h3>
-              <p className="mt-3 text-sm leading-7 text-[#695647]">{step.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="impact" className="bg-[linear-gradient(180deg,_#4f3d30_0%,_#655041_100%)] text-[#f8f2e8]">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-start">
-            <SectionHeading
-              eyebrow="Community impact"
-              title="When advice feels relatable, students can move with more confidence."
-              description="Stori is about belonging, mentorship, honesty, and shared experience. It helps students feel like they are not navigating major decisions in total isolation."
-              inverted
-            />
-            <div className="grid gap-4">
-              {impactPoints.map((point) => (
-                <div
-                  key={point}
-                  className="rounded-[1.5rem] border border-[#806b5d] bg-[rgba(255,248,240,0.08)] p-5 text-[#f8f2e8] shadow-[0_12px_28px_rgba(0,0,0,0.12)]"
-                >
-                  <p className="text-sm leading-7 text-[#f6eee3]">{point}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="rounded-[2rem] border border-[#dccbb8] bg-[linear-gradient(180deg,_#fffaf4_0%,_#f3e7d8_100%)] px-6 py-10 text-center shadow-[0_18px_40px_rgba(87,62,41,0.1)] sm:px-8">
@@ -375,12 +202,7 @@ export default function HackathonLandingPage() {
             </p>
           </div>
           <div className="flex flex-wrap gap-4">
-            <a href="#why">Why Stori</a>
-            <a href="#find">What you'll find</a>
-            <a href="#topics">Topics</a>
             <a href="#stories">Stories</a>
-            <a href="#how">How it works</a>
-            <a href="#impact">Impact</a>
           </div>
         </div>
       </footer>
