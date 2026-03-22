@@ -12,7 +12,7 @@ export default function MediaPlayer({ url }: { url: string | null }) {
       <video
         controls
         preload="metadata"
-        className="w-full rounded mb-3"
+        className="w-full rounded-[1rem]"
         onError={(e) => (e.currentTarget.style.display = "none")}
       >
         <source src={url} />
@@ -21,13 +21,15 @@ export default function MediaPlayer({ url }: { url: string | null }) {
   }
 
   return (
-    <audio
-      controls
-      preload="metadata"
-      className="w-full mb-3"
-      onError={(e) => (e.currentTarget.style.display = "none")}
-    >
-      <source src={url} />
-    </audio>
+    <div className="bg-[#efe3d4] rounded-[1rem] p-4">
+      <audio
+        controls
+        preload="metadata"
+        className="w-full"
+        onError={(e) => (e.currentTarget.style.display = "none")}
+      >
+        <source src={url} />
+      </audio>
+    </div>
   );
 }

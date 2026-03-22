@@ -8,17 +8,17 @@ export default function Navbar() {
 
   function linkClass(href: string) {
     const active = pathname === href;
-    return `text-sm px-3 py-1.5 rounded ${
+    return `text-sm px-4 py-2 rounded-full transition duration-200 ${
       active
-        ? "bg-blue-100 text-blue-700 font-medium"
-        : "text-gray-600 hover:text-gray-900"
+        ? "bg-[#e8f0e4] text-[#42583b] font-semibold"
+        : "text-[#6b5748] hover:text-[#3f2f22] hover:bg-[#efe3d4]"
     }`;
   }
 
   return (
-    <nav className="border-b border-gray-200 bg-white">
-      <div className="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
-        <Link href="/" className="text-lg font-bold text-gray-900">
+    <nav className="bg-[#fbf6f0] border-b border-[#e5d6c5] sticky top-0 z-50">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+        <Link href="/" className="text-lg font-semibold text-[#3f2f22] tracking-tight">
           Stori
         </Link>
         <div className="flex gap-1">
@@ -26,7 +26,7 @@ export default function Navbar() {
             Explore
           </Link>
           <Link href="/upload" className={linkClass("/upload")}>
-            Upload
+            Share
           </Link>
         </div>
       </div>

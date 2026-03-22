@@ -16,34 +16,38 @@ export default async function StoryPage({
   const tags: string[] = JSON.parse(story.tags);
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-10">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <Link
         href="/explore"
-        className="text-sm text-blue-600 hover:underline"
+        className="text-sm text-[#5f6f56] hover:text-[#42583b] font-medium transition duration-200"
       >
         &larr; Back to Explore
       </Link>
 
-      <div className="mt-6 bg-white border border-gray-200 rounded-lg p-6 space-y-6">
-        <h1 className="text-2xl font-bold text-gray-900">
+      <article className="mt-8 bg-[#fffaf4] border border-[#e5d6c5] rounded-[1.75rem] shadow-[0_16px_34px_rgba(87,62,41,0.08)] p-6 sm:p-8 space-y-6">
+        <h1 className="text-3xl font-semibold text-[#3f2f22] tracking-tight leading-snug">
           {story.title || "Untitled Story"}
         </h1>
 
-        <MediaPlayer url={story.media_url} />
+        <div className="rounded-[1rem] overflow-hidden">
+          <MediaPlayer url={story.media_url} />
+        </div>
 
         <div>
-          <h2 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#5f6f56] mb-2">
             Summary
-          </h2>
-          <p className="text-gray-800">{story.summary}</p>
+          </p>
+          <p className="text-base text-[#6b5748] leading-7">
+            {story.summary}
+          </p>
         </div>
 
         {tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2">
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="px-2.5 py-0.5 bg-blue-100 text-blue-800 text-xs rounded-full"
+                className="px-3 py-1 rounded-full text-xs font-medium bg-[#efe3d4] text-[#765f4e]"
               >
                 {tag}
               </span>
@@ -52,18 +56,23 @@ export default async function StoryPage({
         )}
 
         <div>
-          <h2 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#5f6f56] mb-3">
             Full Story
-          </h2>
-          <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+          </p>
+          <div className="text-base text-[#3f2f22] leading-[1.85] whitespace-pre-wrap max-w-prose">
             {story.content}
           </div>
         </div>
 
-        <p className="text-xs text-gray-400">
-          {new Date(story.created_at).toLocaleDateString()}
+        <p className="text-xs text-[#7a6554]/50 pt-4 border-t border-[#e5d6c5]">
+          Shared on{" "}
+          {new Date(story.created_at).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
         </p>
-      </div>
+      </article>
     </div>
   );
 }

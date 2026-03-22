@@ -60,21 +60,26 @@ export default function ExplorePage() {
     : "Recent Stories";
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold mb-6">Explore Stories</h1>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <h1 className="text-3xl font-semibold tracking-tight text-[#3f2f22] mb-1">
+        Explore Stories
+      </h1>
+      <p className="text-base text-[#6b5748] mb-8">
+        Search for experiences, advice, and moments that resonate with you.
+      </p>
 
-      <form onSubmit={handleSearch} className="flex gap-2">
+      <form onSubmit={handleSearch} className="flex gap-3">
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="e.g. feeling like I didn't belong in college"
-          className="flex-1 border border-gray-200 rounded px-3 py-2.5 text-sm"
+          placeholder="Search for experiences (e.g. internships, imposter syndrome)"
+          className="flex-1 bg-[#fffaf4] border border-[#e5d6c5] rounded-full px-5 py-3 text-sm text-[#3f2f22] placeholder:text-[#7a6554]/50 focus:outline-none focus:ring-2 focus:ring-[#42583b]/20 focus:border-[#42583b]/30 transition duration-200 shadow-sm"
         />
         <button
           type="submit"
           disabled={searching}
-          className="px-6 py-2.5 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 text-sm"
+          className="px-7 py-3 bg-[#42583b] text-[#f8f2e8] rounded-full hover:bg-[#364a30] disabled:opacity-50 text-sm font-semibold transition duration-200 shadow-sm"
         >
           {searching ? "Searching..." : "Search"}
         </button>
@@ -82,53 +87,57 @@ export default function ExplorePage() {
           <button
             type="button"
             onClick={handleClear}
-            className="px-4 py-2.5 border border-gray-200 text-gray-500 rounded hover:bg-gray-50 text-sm"
+            className="px-5 py-3 border border-[#cdb79f] text-[#4e3b2d] rounded-full hover:bg-[#f8efe3] text-sm transition duration-200"
           >
             Clear
           </button>
         )}
       </form>
 
-      <h2 className="text-sm font-medium text-gray-500 mt-8 mb-3">
+      <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-[#5f6f56] mt-10 mb-4">
         {heading}
       </h2>
 
       {stories.length === 0 && (
-        <p className="text-sm text-gray-400 py-8 text-center">
-          {searchDone ? "No stories matched your search." : "No stories yet."}
-        </p>
+        <div className="py-16 text-center">
+          <p className="text-base text-[#6b5748]">
+            {searchDone
+              ? "No stories matched your search. Try different words."
+              : "No stories yet. Be the first to share yours."}
+          </p>
+        </div>
       )}
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {stories.map((story) => (
           <Link
             key={story.id}
             href={`/story/${story.id}`}
-            className="block p-4 bg-white border border-gray-200 rounded hover:border-blue-200 hover:shadow-sm transition-all"
+            className="block p-6 bg-[#fffaf4] border border-[#e5d6c5] rounded-[1.5rem] shadow-[0_12px_28px_rgba(87,62,41,0.06)] hover:shadow-[0_16px_34px_rgba(87,62,41,0.1)] hover:-translate-y-0.5 transition duration-200 cursor-pointer"
           >
-            <h3 className="font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-[#3f2f22] leading-snug">
               {story.title || "Untitled Story"}
             </h3>
-            <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+            <p className="text-sm text-[#6b5748] leading-7 mt-2 line-clamp-2">
               {story.summary.length > 180
                 ? story.summary.slice(0, 177) + "..."
                 : story.summary}
             </p>
-            <div className="flex flex-wrap gap-1.5 mt-2">
+            <div className="flex flex-wrap items-center gap-2 mt-3">
               {story.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded-full"
+                  className="px-3 py-1 rounded-full text-xs font-medium bg-[#efe3d4] text-[#765f4e]"
                 >
                   {tag}
                 </span>
               ))}
+              {story.media_url && (
+                <span className="text-xs text-[#7a6554]/50 ml-auto">
+                  Has audio/video
+                </span>
+              )}
             </div>
-            {story.media_url && (
-              <p className="mt-2 text-xs text-gray-400">
-                Has audio/video
-              </p>
-            )}
           </Link>
         ))}
       </div>
