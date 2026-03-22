@@ -134,42 +134,38 @@ export default function HackathonLandingPage() {
   return (
     <div className="bg-[#f7f0e7] text-[#3f2f22]">
       <section className="border-b border-[#e7d9c7] bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.85),_transparent_32%),linear-gradient(180deg,_#fbf6f0_0%,_#f5ecdf_100%)]">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#5f6f56]">
-                What I wish I knew, from people who lived it
-              </p>
-              <h1 className="mt-5 text-4xl font-semibold tracking-tight text-[#32251c] sm:text-5xl lg:text-6xl lg:leading-[1.05]">
-                A story archive that helps first-generation students feel more prepared and less alone.
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-[#6b5748]">
-                Stori is a warm, searchable archive of short written and audio
-                stories from first-gen graduates sharing mistakes, wins, and the
-                advice they wish they heard earlier. It gives students guidance
-                that feels lived-in, honest, and actually useful.
-              </p>
-              <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-                <Link
-                  href="/explore"
-                  className="inline-flex items-center justify-center rounded-full bg-[#42583b] px-7 py-3.5 text-base font-semibold text-[#f8f2e8] shadow-[0_14px_30px_rgba(66,88,59,0.2)] transition duration-200 hover:-translate-y-0.5 hover:bg-[#364a30]"
-                >
-                  Explore Stories
-                </Link>
-                <Link
-                  href="/upload"
-                  className="inline-flex items-center justify-center rounded-full border border-[#cdb79f] bg-[#fffaf3] px-7 py-3.5 text-base font-semibold text-[#4e3b2d] shadow-[0_10px_24px_rgba(78,59,45,0.08)] transition duration-200 hover:-translate-y-0.5 hover:border-[#b79f84] hover:bg-[#f8efe3]"
-                >
-                  Share Your Story
-                </Link>
-              </div>
-              <div className="mt-8 flex flex-wrap gap-3 text-sm text-[#765f4e]">
-                <span className="rounded-full bg-[#efe3d4] px-4 py-2">written stories</span>
-                <span className="rounded-full bg-[#efe3d4] px-4 py-2">audio stories</span>
-                <span className="rounded-full bg-[#efe3d4] px-4 py-2">clear topic tags</span>
-                <span className="rounded-full bg-[#efe3d4] px-4 py-2">AI summaries and search context</span>
-              </div>
-            </div>
+        <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:px-8 lg:py-24">
+          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#5f6f56]">
+            What I wish I knew, from people who lived it
+          </p>
+          <h1 className="mt-5 text-4xl font-semibold tracking-tight text-[#32251c] sm:text-5xl lg:text-6xl lg:leading-[1.05]">
+            A story archive that helps first-generation students feel more prepared and less alone.
+          </h1>
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[#6b5748]">
+            Stori is a warm, searchable archive of short written and audio
+            stories from first-gen graduates sharing mistakes, wins, and the
+            advice they wish they heard earlier. It gives students guidance
+            that feels lived-in, honest, and actually useful.
+          </p>
+          <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <Link
+              href="/explore"
+              className="inline-flex items-center justify-center rounded-full bg-[#42583b] px-7 py-3.5 text-base font-semibold text-[#f8f2e8] shadow-[0_14px_30px_rgba(66,88,59,0.2)] transition duration-200 hover:-translate-y-0.5 hover:bg-[#364a30]"
+            >
+              Explore Stories
+            </Link>
+            <Link
+              href="/upload"
+              className="inline-flex items-center justify-center rounded-full border border-[#cdb79f] bg-[#fffaf3] px-7 py-3.5 text-base font-semibold text-[#4e3b2d] shadow-[0_10px_24px_rgba(78,59,45,0.08)] transition duration-200 hover:-translate-y-0.5 hover:border-[#b79f84] hover:bg-[#f8efe3]"
+            >
+              Share Your Story
+            </Link>
+          </div>
+          <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm text-[#765f4e]">
+            <span className="rounded-full bg-[#efe3d4] px-4 py-2">written stories</span>
+            <span className="rounded-full bg-[#efe3d4] px-4 py-2">audio stories</span>
+            <span className="rounded-full bg-[#efe3d4] px-4 py-2">clear topic tags</span>
+            <span className="rounded-full bg-[#efe3d4] px-4 py-2">AI summaries and search context</span>
           </div>
         </div>
       </section>
