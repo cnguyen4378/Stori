@@ -134,14 +134,14 @@ export default function HackathonLandingPage() {
   return (
     <div className="bg-[#f7f0e7] text-[#3f2f22]">
       <section className="border-b border-[#e7d9c7] bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.85),_transparent_32%),linear-gradient(180deg,_#fbf6f0_0%,_#f5ecdf_100%)]">
-        <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-5xl px-8 py-16 text-center sm:px-20 lg:px-28 lg:py-32">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#5f6f56]">
             What I wish I knew, from people who lived it
           </p>
-          <h1 className="mt-5 text-4xl font-semibold tracking-tight text-[#32251c] sm:text-5xl lg:text-6xl lg:leading-[1.05]">
+          <h1 className="mt-5 text-4xl font-semibold tracking-tight text-[#32251c] sm:text-5xl lg:text-6xl lg:leading-[1.05] mx-4">
             A story archive that helps first-generation students feel more prepared and less alone.
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[#6b5748]">
+          <p className="mt-6 text-lg leading-8 text-[#6b5748]">
             Stori is a warm, searchable archive of short written and audio
             stories from first-gen graduates sharing mistakes, wins, and the
             advice they wish they heard earlier. It gives students guidance
