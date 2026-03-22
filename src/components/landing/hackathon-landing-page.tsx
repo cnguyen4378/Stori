@@ -170,42 +170,6 @@ export default function HackathonLandingPage() {
                 <span className="rounded-full bg-[#efe3d4] px-4 py-2">AI summaries and search context</span>
               </div>
             </div>
-
-            <div className="rounded-[2rem] border border-[#dfcfbb] bg-[#fffaf4] p-5 shadow-[0_24px_60px_rgba(87,62,41,0.12)] sm:p-6">
-              <div className="rounded-[1.5rem] bg-[linear-gradient(160deg,_#4c3b2f_0%,_#675242_100%)] p-6 text-[#f8f2e8] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-                <p className="text-sm uppercase tracking-[0.24em] text-[#eadfce]">
-                  Why this matters
-                </p>
-                <p className="mt-4 text-2xl font-semibold leading-tight">
-                  The most helpful advice is often the advice people only learn after making the mistake themselves.
-                </p>
-                <p className="mt-4 text-sm leading-7 text-[#f2e9dc]">
-                  Stori turns those lessons into something students can actually find,
-                  whether they are browsing by topic, discovering story summaries,
-                  or listening to someone's experience in their own voice.
-                </p>
-              </div>
-              <div className="mt-4 grid gap-4 sm:grid-cols-3">
-                <div className="rounded-[1.25rem] border border-[#e6d9cb] bg-[#fcf7f1] p-4">
-                  <p className="text-2xl font-semibold text-[#3f2f22]">First-gen</p>
-                  <p className="mt-2 text-sm leading-6 text-[#6b5748]">
-                    advice for students who do not have a built-in roadmap
-                  </p>
-                </div>
-                <div className="rounded-[1.25rem] border border-[#e6d9cb] bg-[#fcf7f1] p-4">
-                  <p className="text-2xl font-semibold text-[#3f2f22]">Warm</p>
-                  <p className="mt-2 text-sm leading-6 text-[#6b5748]">
-                    guidance that feels supportive instead of distant or generic
-                  </p>
-                </div>
-                <div className="rounded-[1.25rem] border border-[#e6d9cb] bg-[#fcf7f1] p-4">
-                  <p className="text-2xl font-semibold text-[#3f2f22]">Searchable</p>
-                  <p className="mt-2 text-sm leading-6 text-[#6b5748]">
-                    stories organized so students can get to the point quickly
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
