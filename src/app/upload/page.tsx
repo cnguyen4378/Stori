@@ -10,8 +10,10 @@ interface SavedStory {
 }
 
 export default function UploadPage() {
+  const [mode, setMode] = useState<"media" | "text">("media");
   const [file, setFile] = useState<File | null>(null);
   const [transcription, setTranscription] = useState("");
+  const [textDraft, setTextDraft] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -29,6 +31,21 @@ export default function UploadPage() {
     summary: string;
     tags: string[];
   } | null>(null);
+
+  function switchMode(newMode: "media" | "text") {
+    setMode(newMode);
+    setError("");
+    setPreview(null);
+    setSavedStory(null);
+    if (newMode === "text") {
+      setFile(null);
+      setTranscription("");
+      if (fileRef.current) fileRef.current.value = "";
+    } else {
+      setTextDraft("");
+      setTranscription("");
+    }
+  }
 
   async function handleTranscribe(e: React.FormEvent) {
     e.preventDefault();
@@ -61,6 +78,11 @@ export default function UploadPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleTextSubmit() {
+    if (!textDraft.trim()) return;
+    setTranscription(textDraft.trim());
   }
 
   async function handlePreview() {
@@ -127,6 +149,7 @@ export default function UploadPage() {
   function handleReset() {
     setFile(null);
     setTranscription("");
+    setTextDraft("");
     setError("");
     setSavedStory(null);
     setPreview(null);
@@ -146,55 +169,111 @@ export default function UploadPage() {
             </p>
           </div>
 
-          <form onSubmit={handleTranscribe} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-[#3f2f22] mb-2">
-                Upload audio or video
-              </label>
-              <input
-                ref={fileRef}
-                type="file"
-                accept=".mp3,.mp4,.m4a,.wav,.webm,.ogg,.flac,.aac,.mov,audio/*,video/*"
-                onChange={(e) => {
-                  setFile(e.target.files?.[0] || null);
-                  setSavedStory(null);
-                  setPreview(null);
-                  setTranscription("");
-                }}
-                className="block w-full text-sm text-[#6b5748] file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:bg-[#efe3d4] file:text-[#4e3b2d] file:font-medium file:cursor-pointer hover:file:bg-[#e5d6c5] transition duration-200"
-              />
-            </div>
+          <div className="flex gap-2 p-1 bg-[#efe3d4] rounded-full">
+            <button
+              type="button"
+              onClick={() => switchMode("media")}
+              className={`flex-1 py-2 text-sm font-medium rounded-full transition duration-200 ${
+                mode === "media"
+                  ? "bg-[#fffaf4] text-[#3f2f22] shadow-sm"
+                  : "text-[#6b5748] hover:text-[#3f2f22]"
+              }`}
+            >
+              Upload Media
+            </button>
+            <button
+              type="button"
+              onClick={() => switchMode("text")}
+              className={`flex-1 py-2 text-sm font-medium rounded-full transition duration-200 ${
+                mode === "text"
+                  ? "bg-[#fffaf4] text-[#3f2f22] shadow-sm"
+                  : "text-[#6b5748] hover:text-[#3f2f22]"
+              }`}
+            >
+              Write It Out
+            </button>
+          </div>
 
-            {file && filePreviewUrl && (
-              <div className="rounded-[1rem] overflow-hidden">
-                {file.type.startsWith("video/") ? (
-                  <video
-                    controls
-                    preload="metadata"
-                    className="w-full rounded-[1rem]"
-                    src={filePreviewUrl}
-                  />
-                ) : (
-                  <div className="bg-[#efe3d4] rounded-[1rem] p-4">
-                    <audio
+          {mode === "media" ? (
+            <form onSubmit={handleTranscribe} className="space-y-5">
+              <div>
+                <label className="block text-sm font-medium text-[#3f2f22] mb-2">
+                  Upload audio or video
+                </label>
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept=".mp3,.mp4,.m4a,.wav,.webm,.ogg,.flac,.aac,.mov,audio/*,video/*"
+                  onChange={(e) => {
+                    setFile(e.target.files?.[0] || null);
+                    setSavedStory(null);
+                    setPreview(null);
+                    setTranscription("");
+                  }}
+                  className="block w-full text-sm text-[#6b5748] file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:bg-[#efe3d4] file:text-[#4e3b2d] file:font-medium file:cursor-pointer hover:file:bg-[#e5d6c5] transition duration-200"
+                />
+              </div>
+
+              {file && filePreviewUrl && (
+                <div className="rounded-[1rem] overflow-hidden">
+                  {file.type.startsWith("video/") ? (
+                    <video
                       controls
                       preload="metadata"
-                      className="w-full"
+                      className="w-full rounded-[1rem]"
                       src={filePreviewUrl}
                     />
-                  </div>
-                )}
-              </div>
-            )}
+                  ) : (
+                    <div className="bg-[#efe3d4] rounded-[1rem] p-4">
+                      <audio
+                        controls
+                        preload="metadata"
+                        className="w-full"
+                        src={filePreviewUrl}
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
 
-            <button
-              type="submit"
-              disabled={!file || loading}
-              className="px-7 py-3 bg-[#42583b] text-[#f8f2e8] rounded-full font-semibold hover:bg-[#364a30] disabled:opacity-40 transition duration-200 shadow-sm"
-            >
-              {loading ? "Transcribing..." : "Transcribe"}
-            </button>
-          </form>
+              <button
+                type="submit"
+                disabled={!file || loading}
+                className="px-7 py-3 bg-[#42583b] text-[#f8f2e8] rounded-full font-semibold hover:bg-[#364a30] disabled:opacity-40 transition duration-200 shadow-sm"
+              >
+                {loading ? "Transcribing..." : "Transcribe"}
+              </button>
+            </form>
+          ) : (
+            <div className="space-y-5">
+              <div>
+                <label className="block text-sm font-medium text-[#3f2f22] mb-2">
+                  Write your story
+                </label>
+                <textarea
+                  value={textDraft}
+                  onChange={(e) => {
+                    setTextDraft(e.target.value);
+                    setSavedStory(null);
+                    setPreview(null);
+                    setTranscription("");
+                  }}
+                  rows={8}
+                  placeholder="Share what you wish you had known — a challenge, a lesson, a moment that shaped you..."
+                  className="w-full p-5 bg-[#fbf6f0] border border-[#e5d6c5] rounded-[1rem] text-sm text-[#3f2f22] leading-relaxed resize-y focus:outline-none focus:ring-2 focus:ring-[#42583b]/20 transition duration-200 placeholder:text-[#b5a596]"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={handleTextSubmit}
+                disabled={!textDraft.trim()}
+                className="px-7 py-3 bg-[#42583b] text-[#f8f2e8] rounded-full font-semibold hover:bg-[#364a30] disabled:opacity-40 transition duration-200 shadow-sm"
+              >
+                Continue
+              </button>
+            </div>
+          )}
 
           {error && (
             <div className="p-4 bg-[#f0dfcf] border border-[#e0cfbc] text-[#5b4638] rounded-[1rem] text-sm">
@@ -205,7 +284,7 @@ export default function UploadPage() {
           {transcription && !savedStory && (
             <div className="space-y-4">
               <h2 className="text-lg font-semibold text-[#3f2f22]">
-                Transcription
+                {mode === "text" ? "Your Story" : "Transcription"}
               </h2>
               <textarea
                 value={transcription}
@@ -217,7 +296,7 @@ export default function UploadPage() {
                 className="w-full p-5 bg-[#fbf6f0] border border-[#e5d6c5] rounded-[1rem] text-sm text-[#3f2f22] leading-relaxed resize-y focus:outline-none focus:ring-2 focus:ring-[#42583b]/20 transition duration-200"
               />
               <p className="text-xs text-[#7a6554]/60">
-                You can edit the transcription above before previewing.
+                You can edit the text above before previewing.
               </p>
 
               {!preview && (
